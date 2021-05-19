@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+    <script src="jquery-3.1.1.js"></script>
+</head>
+<body>
+    <button id="ShowContent" onclick="doLongPolling()">Show content</button>
+   <div id="dynamicText">
+
+   </div>
+    <script>
+    var dynamicText = document.getElementById("dynamicText")
+    var lastModified = 0
+    function doLongPolling(){
+        console.log("welcome")
+        $.ajax({
+            method: 'get',
+            // url: 'http://localhost/ajax_server.php',
+            url: 'http://localhost:8888',
+            data: {lastmod: lastModified},
+            success: function(res){
+                //php
+                // console.log(res)
+                // lastModified = JSON.parse(res).lastmod ? JSON.parse(res).lastmod:0;
+                //python
+                console.log(res)
+                dynamicText.innerHTML=res.body
+                lastModified = res.lastmod ? res.lastmod:0;
+                doLongPolling()
+            }
+        })
+    }
+    // doLongPolling()
+    </script>
+</body>
+</html>
